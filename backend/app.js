@@ -68,7 +68,7 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (!isProduction) {
   app.use(function(err, req, res, next) {
-    console.log(err.stack);
+    console.log('error:', err.stack);
 
     res.status(err.status || 500);
 

@@ -3,6 +3,7 @@ import React from "react";
 import agent from "../../agent";
 import { connect } from "react-redux";
 import { CHANGE_TAB } from "../../constants/actionTypes";
+import { EmojiFrownFill } from "react-bootstrap-icons";
 
 const YourFeedTab = (props) => {
   if (props.token) {
@@ -58,6 +59,20 @@ const TagFilterTab = (props) => {
   );
 };
 
+const SearchFilterTab = (props) => {
+  if (!props.text) {
+    return null;
+  }
+
+  return (
+    <li className="nav-item">
+      <button type="button" className="nav-link active">
+        <i className="ion-search"></i> {props.text}
+      </button>
+    </li>
+  );
+};
+
 const mapStateToProps = (state) => ({
   ...state.itemList,
   tags: state.home.tags,
@@ -83,16 +98,46 @@ const MainView = (props) => {
           <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
 
           <TagFilterTab tag={props.tag} />
+          <SearchFilterTab text={props.text} />
         </ul>
       </div>
 
-      <ItemList
-        pager={props.pager}
-        items={props.items}
-        loading={props.loading}
-        itemsCount={props.itemsCount}
-        currentPage={props.currentPage}
-      />
+      {props.itemsCount > 0 ? (
+        <ItemList
+          pager={props.pager}
+          items={props.items}
+          loading={props.loading}
+          itemsCount={props.itemsCount}
+          currentPage={props.currentPage}
+        />
+      ) : props.text ? (
+        <div
+          id="empty"
+          style={{
+            width: "30vw",
+            height: "30vh",
+            background: "#ffffff30",
+            margin: "auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <EmojiFrownFill color="white" size="3em" />
+            </div>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <span>
+                No items found for "<b>{props.text}</b>".
+              </span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="py-4 no-items">No items are here... yet.</div>
+      )}
+
     </div>
   );
 };
