@@ -1,3 +1,3 @@
 #!/bin/sh
 
-yarn seeds
+yarn run seeds
